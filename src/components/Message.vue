@@ -18,6 +18,6 @@ export default {
 <style  scoped>
 .message {
   text-align: center;
-  padding: 20px;
+  color: #ba3838;
 }
 </style>
