@@ -80,25 +80,30 @@ export default {
       title: "NotesApp",
       search: "",
       message: null,
+      priority: "standard",
       grid: true,
       note: {
         title: "",
         descr: "",
+        priority: "standard",
       },
       notes: [
         {
           title: "First Note",
           descr: "Description for first note",
+          priority: "standard",
           date: new Date(Date.now()).toLocaleString(),
         },
         {
           title: "Second Note",
           descr: "Description for second note",
+          priority: "standard",
           date: new Date(Date.now()).toLocaleString(),
         },
         {
           title: "Third Note",
           descr: "Description for third note",
+          priority: "standard",
           date: new Date(Date.now()).toLocaleString(),
         },
       ],
@@ -124,7 +129,7 @@ export default {
   },
   methods: {
     addNote() {
-      let { title, descr } = this.note;
+      let { title, descr, priority } = this.note;
 
       if (title === "") {
         this.message = "Title can not be blank!";
@@ -133,11 +138,13 @@ export default {
       this.notes.push({
         title,
         descr,
+        priority,
         date: new Date(Date.now()).toLocaleString(),
       });
       this.message = null;
       this.note.title = "";
       this.note.descr = "";
+      this.note.priority = "standard";
     },
     removeNote(index) {
       this.notes.splice(index, 1);

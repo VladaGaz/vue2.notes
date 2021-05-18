@@ -4,12 +4,17 @@
     <input v-model="note.title" type="text" />
     <label>Description</label>
     <textarea v-model="note.descr"></textarea>
+    <taskPriority :dataSelect="note.priority" @onChange="priorityMethods" />
     <button class="btn" @click="addNote">New note</button>
   </div>
 </template>
 
 <script>
+import taskPriority from "@/components/TaskPriority.vue";
 export default {
+  components: {
+    taskPriority,
+  },
   props: {
     note: {
       type: Object,
@@ -19,6 +24,9 @@ export default {
   methods: {
     addNote() {
       this.$emit("addNote", this.note);
+    },
+    priorityMethods(objectPriority) {
+      this.note.priority = objectPriority.select;
     },
   },
 };
