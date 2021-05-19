@@ -55,7 +55,17 @@
               </svg>
             </div>
           </div>
-          <notes :notes="notesFilter" :grid="grid" @remove="removeNote" />
+          <notes
+            :notes="notesFilter"
+            :grid="grid"
+            :showNotes="showNotes"
+            :showIndex="showIndex"
+            :showCenterNote="showCenterNote"
+            @remove="removeNote"
+            @change="changeNote"
+            @back="backNote"
+            @updateDate="updateDate"
+          />
         </div>
       </section>
     </div>
@@ -82,6 +92,9 @@ export default {
       message: null,
       priority: "standard",
       grid: true,
+      showNotes: true,
+      showIndex: -1,
+      showCenterNote: false,
       note: {
         title: "",
         descr: "",
@@ -97,13 +110,13 @@ export default {
         {
           title: "Second Note",
           descr: "Description for second note",
-          priority: "standard",
+          priority: "important",
           date: new Date(Date.now()).toLocaleString(),
         },
         {
           title: "Third Note",
           descr: "Description for third note",
-          priority: "standard",
+          priority: "veryImportant",
           date: new Date(Date.now()).toLocaleString(),
         },
       ],
@@ -148,6 +161,18 @@ export default {
     },
     removeNote(index) {
       this.notes.splice(index, 1);
+    },
+    changeNote(index) {
+      this.showNotes = false;
+      this.showIndex = index;
+      //для добавления отцентрирования кнопки
+      this.showCenterNote = true;
+    },
+    backNote() {
+      this.showNotes = true;
+    },
+    updateDate({ index, data }) {
+      this.notes[index].date = data;
     },
   },
 };
