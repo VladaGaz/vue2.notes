@@ -16,12 +16,13 @@
         <p v-if="showNotes">{{ note.title }}</p>
         <input
           v-else
-          v-model="note.title"
+          :value="note.title"
           :class="{
             standard: note.priority === 'standard',
             important: note.priority === 'important',
             'very-important': note.priority === 'veryImportant',
           }"
+          @change="changeTitle($event.target.value)"
         />
         <div class="icon-img">
           <p
@@ -31,16 +32,26 @@
           >
             <img src="../assets/change.png" style="width: 15px" />
           </p>
+
           <p
             style="cursor: pointer"
             @click="
-              backNote(index),
+              saveNote(index),
                 updateDate(index, new Date(Date.now()).toLocaleString())
             "
             v-show="!showNotes"
           >
+            <img src="../assets/save.png" style="width: 17px" />
+          </p>
+
+          <p
+            style="cursor: pointer"
+            @click="backNote(index)"
+            v-show="!showNotes"
+          >
             <img src="../assets/back.png" style="width: 15px" />
           </p>
+
           <p
             style="cursor: pointer"
             @click="removeNote(index)"
@@ -54,12 +65,13 @@
         <p v-if="showNotes">{{ note.descr }}</p>
         <input
           v-else
-          v-model="note.descr"
+          :value="note.descr"
           :class="{
             standard: note.priority === 'standard',
             important: note.priority === 'important',
             'very-important': note.priority === 'veryImportant',
           }"
+          @change="changeDescr($event.target.value)"
         />
         <span>{{ note.date }}</span>
       </div>
@@ -71,7 +83,12 @@
 export default {
   data() {
     return {
-      placeholder: "",
+      updateNote: {
+        title: "",
+        descr: "",
+        beforeChangeTitle: "",
+        beforeChangeDescr: "",
+      },
     };
   },
   props: {
@@ -97,13 +114,28 @@ export default {
     },
   },
   methods: {
+    changeTitle(value) {
+      this.updateNote.title = value;
+    },
+    changeDescr(value) {
+      this.updateNote.descr = value;
+    },
+    saveNote(index) {
+      this.$emit("save", { newNote: this.updateNote, index });
+    },
     removeNote(index) {
       this.$emit("remove", index);
     },
     changeNote(index) {
+      //чтобы соханить значения до редактирования
+      this.updateNote.beforeChangeTitle = this.updateNote.title;
+      this.updateNote.beforeChangeDescr = this.updateNote.descr;
       this.$emit("change", index);
     },
     backNote() {
+      //если не было изменений, то переменные принимают значения до редактирования
+      this.updateNote.title = this.updateNote.beforeChangeTitle;
+      this.updateNote.descr = this.updateNote.beforeChangeDescr;
       this.$emit("back");
     },
     updateDate(index, data) {

@@ -3,10 +3,10 @@
     <div class="wrapper-content">
       <section>
         <div class="container">
-          <h1>{{ title }}</h1>
-          <newNote :note="note" @addNote="addNote" />
+          <h1 v-show="showNotes">{{ title }}</h1>
+          <newNote v-show="showNotes" :note="note" @addNote="addNote" />
           <message v-if="message" :message="message" />
-          <div class="note-header" style="margin: 36px 0">
+          <div v-show="showNotes" class="note-header" style="margin: 36px 0">
             <search
               :value="search"
               placeholder="Find your note"
@@ -65,6 +65,7 @@
             @change="changeNote"
             @back="backNote"
             @updateDate="updateDate"
+            @save="saveNote"
           />
         </div>
       </section>
@@ -173,6 +174,15 @@ export default {
     },
     updateDate({ index, data }) {
       this.notes[index].date = data;
+    },
+    saveNote(noteObj) {
+      if (noteObj.newNote.title !== "") {
+        this.notes[noteObj.index].title = noteObj.newNote.title;
+      }
+      if (noteObj.newNote.descr !== "") {
+        this.notes[noteObj.index].descr = noteObj.newNote.descr;
+      }
+      this.showNotes = true;
     },
   },
 };
